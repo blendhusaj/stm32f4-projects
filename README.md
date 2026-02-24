@@ -136,12 +136,6 @@ So: BSP handles *how* the button and timer work; main only decides *when* to tog
 
 ---
 
-## Learn more (detailed docs)
-
-- **[BSP_code_documentation.md](BSP/BSP_code_documentation.md)** – Full explanation of `main.c` and `stm32f4xx_nucleo.h` / `stm32f4xx_nucleo.c`, with tables and design notes.
-- **[BSP_plan_with_graphs.html](BSP/BSP_plan_with_graphs.html)** – Same content with **architecture and data-flow diagrams**; open in a browser (internet needed once to load the diagram library).
-
-Both are written so that a beginner can follow what each file does and how they connect.
 
 ### Docs folder (reference material)
 
