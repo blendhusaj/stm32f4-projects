@@ -94,8 +94,8 @@ From the project documentation (exported from the BSP plan):
 ├── BSP/
 │   ├── stm32f4xx_nucleo.h      ← BSP: declarations (structs, prototypes)
 │   ├── stm32f4xx_nucleo.c      ← BSP: implementation (GPIO, SysTick, delays)
-│   ├── BSP_code_documentation.md
-│   └── BSP_plan_with_graphs.html
+│  
+│   
 ├── docs/
 │   ├── architecture_overview.png   ← Architecture diagram (from BSP doc)
 │   ├── code_structures.png         ← Code structure diagram
