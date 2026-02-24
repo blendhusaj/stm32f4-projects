@@ -81,9 +81,9 @@ From the project documentation (exported from the BSP plan):
 
 **Code structures** – how the modules connect:
 
-![Code structures](docs/code_structures.png)
+![Code structures](docs/code_structure.png)
 
-*(If your images use `.jpg`, rename the paths above or save the figures as `architecture_overview.png` and `code_structures.png` in the `docs` folder.)*
+
 
 ---
 
