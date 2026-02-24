@@ -21,15 +21,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
   8 .data         0000000c  20000000  080021a8  00004000  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  9 .bss          0000007c  2000000c  080021b4  0000400c  2**2
+  9 .bss          00000088  2000000c  080021b4  0000400c  2**2
                   ALLOC
- 10 ._user_heap_stack 00000600  20000088  080021b4  00004088  2**0
+ 10 ._user_heap_stack 00000604  20000094  080021b4  00004094  2**0
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  0000400c  2**0
                   CONTENTS, READONLY
- 12 .debug_info   00008808  00000000  00000000  0000403c  2**0
+ 12 .debug_info   00008806  00000000  00000000  0000403c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00001791  00000000  00000000  0000c844  2**0
+ 13 .debug_abbrev 00001791  00000000  00000000  0000c842  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  14 .debug_aranges 00000740  00000000  00000000  0000dfd8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
@@ -37,13 +37,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_macro  00020704  00000000  00000000  0000ec9e  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   00009500  00000000  00000000  0002f3a2  2**0
+ 17 .debug_line   00009506  00000000  00000000  0002f3a2  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000c8919  00000000  00000000  000388a2  2**0
+ 18 .debug_str    000c891b  00000000  00000000  000388a8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  001011bb  2**0
+ 19 .comment      00000043  00000000  00000000  001011c3  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00001cb8  00000000  00000000  00101200  2**2
+ 20 .debug_frame  00001cb0  00000000  00000000  00101208  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  21 .debug_line_str 0000003d  00000000  00000000  00102eb8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
@@ -731,37 +731,33 @@ void buttonConfig_Init(void)
 
 void App_SysTick_Init(void){
  8000770:	b580      	push	{r7, lr}
- 8000772:	b084      	sub	sp, #16
- 8000774:	af00      	add	r7, sp, #0
-	  SysTick_Config_t sysT = {
-	 		 .load = (SystemCoreClock / 1000) -1 , // 1ms ick
- 8000776:	4b0a      	ldr	r3, [pc, #40]	@ (80007a0 <App_SysTick_Init+0x30>)
- 8000778:	681b      	ldr	r3, [r3, #0]
- 800077a:	4a0a      	ldr	r2, [pc, #40]	@ (80007a4 <App_SysTick_Init+0x34>)
- 800077c:	fba2 2303 	umull	r2, r3, r2, r3
- 8000780:	099b      	lsrs	r3, r3, #6
- 8000782:	3b01      	subs	r3, #1
-	  SysTick_Config_t sysT = {
- 8000784:	607b      	str	r3, [r7, #4]
- 8000786:	2300      	movs	r3, #0
- 8000788:	60bb      	str	r3, [r7, #8]
- 800078a:	2307      	movs	r3, #7
- 800078c:	60fb      	str	r3, [r7, #12]
-	 		 .val = 0,
-	 		 .ctrl = SYSTICK_CTRL_ENABLE | SYSTICK_CTRL_TICKINIT | SYSTICK_CTRL_CLKSOURCE
-	  };
-	  BSP_SysTick_ApplyConfig(&sysT);
- 800078e:	1d3b      	adds	r3, r7, #4
- 8000790:	4618      	mov	r0, r3
- 8000792:	f7ff ff77 	bl	8000684 <BSP_SysTick_ApplyConfig>
+ 8000772:	af00      	add	r7, sp, #0
+	  syscfg.load = (SystemCoreClock / 1000) -1; // 1ms ick
+ 8000774:	4b09      	ldr	r3, [pc, #36]	@ (800079c <App_SysTick_Init+0x2c>)
+ 8000776:	681b      	ldr	r3, [r3, #0]
+ 8000778:	4a09      	ldr	r2, [pc, #36]	@ (80007a0 <App_SysTick_Init+0x30>)
+ 800077a:	fba2 2303 	umull	r2, r3, r2, r3
+ 800077e:	099b      	lsrs	r3, r3, #6
+ 8000780:	3b01      	subs	r3, #1
+ 8000782:	4a08      	ldr	r2, [pc, #32]	@ (80007a4 <App_SysTick_Init+0x34>)
+ 8000784:	6013      	str	r3, [r2, #0]
+	  syscfg.val = 0;
+ 8000786:	4b07      	ldr	r3, [pc, #28]	@ (80007a4 <App_SysTick_Init+0x34>)
+ 8000788:	2200      	movs	r2, #0
+ 800078a:	605a      	str	r2, [r3, #4]
+	  syscfg.ctrl = SYSTICK_CTRL_ENABLE | SYSTICK_CTRL_TICKINIT | SYSTICK_CTRL_CLKSOURCE;
+ 800078c:	4b05      	ldr	r3, [pc, #20]	@ (80007a4 <App_SysTick_Init+0x34>)
+ 800078e:	2207      	movs	r2, #7
+ 8000790:	609a      	str	r2, [r3, #8]
+	  BSP_SysTick_ApplyConfig(&syscfg);
+ 8000792:	4804      	ldr	r0, [pc, #16]	@ (80007a4 <App_SysTick_Init+0x34>)
+ 8000794:	f7ff ff76 	bl	8000684 <BSP_SysTick_ApplyConfig>
 }
- 8000796:	bf00      	nop
- 8000798:	3710      	adds	r7, #16
- 800079a:	46bd      	mov	sp, r7
- 800079c:	bd80      	pop	{r7, pc}
- 800079e:	bf00      	nop
- 80007a0:	20000000 	.word	0x20000000
- 80007a4:	10624dd3 	.word	0x10624dd3
+ 8000798:	bf00      	nop
+ 800079a:	bd80      	pop	{r7, pc}
+ 800079c:	20000000 	.word	0x20000000
+ 80007a0:	10624dd3 	.word	0x10624dd3
+ 80007a4:	20000084 	.word	0x20000084
 
 080007a8 <configGpio>:
 
@@ -1407,7 +1403,7 @@ LoopFillZerobss:
   ldr r2, =_sbss
  8000ae0:	2000000c 	.word	0x2000000c
   ldr r4, =_ebss
- 8000ae4:	20000088 	.word	0x20000088
+ 8000ae4:	20000094 	.word	0x20000094
 
 08000ae8 <ADC_IRQHandler>:
  * @retval None       
@@ -1570,7 +1566,7 @@ __weak void HAL_IncTick(void)
  8000bac:	4770      	bx	lr
  8000bae:	bf00      	nop
  8000bb0:	20000008 	.word	0x20000008
- 8000bb4:	20000084 	.word	0x20000084
+ 8000bb4:	20000090 	.word	0x20000090
 
 08000bb8 <HAL_GetTick>:
   * @note This function is declared as __weak to be overwritten in case of other 
@@ -1590,7 +1586,7 @@ __weak uint32_t HAL_GetTick(void)
  8000bc4:	f85d 7b04 	ldr.w	r7, [sp], #4
  8000bc8:	4770      	bx	lr
  8000bca:	bf00      	nop
- 8000bcc:	20000084 	.word	0x20000084
+ 8000bcc:	20000090 	.word	0x20000090
 
 08000bd0 <__NVIC_SetPriorityGrouping>:
            In case of a conflict between priority grouping and available

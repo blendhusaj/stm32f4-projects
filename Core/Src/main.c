@@ -7,6 +7,7 @@ UART_HandleTypeDef huart2;
 extern uint32_t SystemCoreClock;
 
 static User_Button_config_t btn;
+static SysTick_Config_t syscfg;
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -54,12 +55,10 @@ void buttonConfig_Init(void)
 }
 
 void App_SysTick_Init(void){
-	  SysTick_Config_t sysT = {
-	 		 .load = (SystemCoreClock / 1000) -1 , // 1ms ick
-	 		 .val = 0,
-	 		 .ctrl = SYSTICK_CTRL_ENABLE | SYSTICK_CTRL_TICKINIT | SYSTICK_CTRL_CLKSOURCE
-	  };
-	  BSP_SysTick_ApplyConfig(&sysT);
+	  syscfg.load = (SystemCoreClock / 1000) -1; // 1ms ick
+	  syscfg.val = 0;
+	  syscfg.ctrl = SYSTICK_CTRL_ENABLE | SYSTICK_CTRL_TICKINIT | SYSTICK_CTRL_CLKSOURCE;
+	  BSP_SysTick_ApplyConfig(&syscfg);
 }
 
 
