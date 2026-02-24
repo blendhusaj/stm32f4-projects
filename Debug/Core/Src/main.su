@@ -1,7 +1,7 @@
-../Core/Src/main.c:17:5:main	24	static,ignoring_inline_asm
-../Core/Src/main.c:46:6:buttonConfig_Init	8	static
-../Core/Src/main.c:55:6:App_SysTick_Init	24	static
-../Core/Src/main.c:65:6:configGpio	4	static
-../Core/Src/main.c:69:13:MX_USART2_UART_Init	16	static
-../Core/Src/main.c:87:13:MX_GPIO_Init	16	static
-../Core/Src/main.c:92:6:SystemClock_Config	88	static
+../Core/Src/main.c:18:5:main	24	static,ignoring_inline_asm
+../Core/Src/main.c:47:6:buttonConfig_Init	8	static
+../Core/Src/main.c:56:6:App_SysTick_Init	24	static
+../Core/Src/main.c:66:6:configGpio	4	static
+../Core/Src/main.c:70:13:MX_USART2_UART_Init	16	static
+../Core/Src/main.c:88:13:MX_GPIO_Init	16	static
+../Core/Src/main.c:93:6:SystemClock_Config	88	static

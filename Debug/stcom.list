@@ -35,17 +35,17 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  15 .debug_rnglists 00000586  00000000  00000000  0000e718  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  00020706  00000000  00000000  0000ec9e  2**0
+ 16 .debug_macro  00020704  00000000  00000000  0000ec9e  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   000094fc  00000000  00000000  0002f3a4  2**0
+ 17 .debug_line   00009500  00000000  00000000  0002f3a2  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000c8919  00000000  00000000  000388a0  2**0
+ 18 .debug_str    000c8919  00000000  00000000  000388a2  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  001011b9  2**0
+ 19 .comment      00000043  00000000  00000000  001011bb  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00001cb8  00000000  00000000  001011fc  2**2
+ 20 .debug_frame  00001cb8  00000000  00000000  00101200  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 0000003d  00000000  00000000  00102eb4  2**0
+ 21 .debug_line_str 0000003d  00000000  00000000  00102eb8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -370,7 +370,7 @@ Disassembly of section .text:
  800052e:	bf00      	nop
 
 08000530 <SysTick_Handler>:
-
+  */
 /* Tick counter - incremented every 1 ms by SysTick_Handler */
 static volatile uint32_t l_tickCtr = 0;
 

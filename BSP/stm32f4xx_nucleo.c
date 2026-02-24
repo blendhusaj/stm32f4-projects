@@ -26,66 +26,6 @@
 #include "main.h"
 
 
-/* Tick counter - incremented every 1 ms by SysTick_Handler */
-static volatile uint32_t l_tickCtr = 0;
-
-void SysTick_Handler(void)
-{
-    HAL_IncTick();   /* Keep HAL_Delay working */
-    ++l_tickCtr;
-}
-// user button config
-void BSP_Button_Init(const User_Button_config_t *button){
-	uint32_t pin_pos = __builtin_ctz(button->pin);   /* e.g. GPIO_PIN_13 -> 13 */
-	    uint32_t shift = 2u * pin_pos;
-
-	// enable GPIO clock
-	if(button->port == GPIOA){__HAL_RCC_GPIOA_CLK_ENABLE();}
-	else if(button->port == GPIOB){__HAL_RCC_GPIOB_CLK_ENABLE();}
-	else if(button->port == GPIOC){__HAL_RCC_GPIOC_CLK_ENABLE();}
-
-	// MODER
-	button->port->MODER &= ~(3u << shift);
-	button->port->MODER |= (button->mode << shift);
-
-	// PUP: 01->up, 10->down
-	button->port->PUPDR &= ~(3u << shift);
-	button->port->PUPDR |= (button->pull << shift);
-
-}
-
-uint8_t BSP_Button_GetState(const User_Button_config_t *button)
-{
-    /* Nucleo B1 is active-low: pressed = low. Return 1 when pressed. */
-    return (button->port->IDR & button->pin) ? 0u : 1u;
-}
-
-void BSP_SysTick_ApplyConfig(const SysTick_Config_t *config)
-{
-    SysTick->LOAD = config->load & 0x00FFFFFFu;   /* 24-bit only */
-    SysTick->VAL  = config->val & 0x00FFFFFFu;    /* 24-bit only */
-    SysTick->CTRL = config->ctrl & 0x07u;         /* Only bits 0,1,2 used */
-}
-
-void BSP_Delay(uint32_t ms)
-{
-    uint32_t start = l_tickCtr;
-    while ((l_tickCtr - start) < ms)
-    {
-        __NOP();
-    }
-}
-
-
-uint32_t BSP_GetTick(void)
-{
-    return l_tickCtr;
-}
-
-uint8_t BSP_TimerExpired(uint32_t target_tick)
-{
-    return (l_tickCtr >= target_tick) ? 1 : 0;
-}
 
 
 /** @defgroup BSP BSP
@@ -222,6 +162,67 @@ static void ADCx_MspDeInit(ADC_HandleTypeDef *hadc);
   * @brief  This method returns the STM32F4xx NUCLEO BSP Driver revision
   * @retval version: 0xXYZR (8bits for each decimal, R for RC)
   */
+/* Tick counter - incremented every 1 ms by SysTick_Handler */
+static volatile uint32_t l_tickCtr = 0;
+
+void SysTick_Handler(void)
+{
+    HAL_IncTick();   /* Keep HAL_Delay working */
+    ++l_tickCtr;
+}
+// user button config
+void BSP_Button_Init(const User_Button_config_t *button){
+	uint32_t pin_pos = __builtin_ctz(button->pin);   /* e.g. GPIO_PIN_13 -> 13 */
+	    uint32_t shift = 2u * pin_pos;
+
+	// enable GPIO clock
+	if(button->port == GPIOA){__HAL_RCC_GPIOA_CLK_ENABLE();}
+	else if(button->port == GPIOB){__HAL_RCC_GPIOB_CLK_ENABLE();}
+	else if(button->port == GPIOC){__HAL_RCC_GPIOC_CLK_ENABLE();}
+
+	// MODER
+	button->port->MODER &= ~(3u << shift);
+	button->port->MODER |= (button->mode << shift);
+
+	// PUP: 01->up, 10->down
+	button->port->PUPDR &= ~(3u << shift);
+	button->port->PUPDR |= (button->pull << shift);
+
+}
+
+uint8_t BSP_Button_GetState(const User_Button_config_t *button)
+{
+    /* Nucleo B1 is active-low: pressed = low. Return 1 when pressed. */
+    return (button->port->IDR & button->pin) ? 0u : 1u;
+}
+
+void BSP_SysTick_ApplyConfig(const SysTick_Config_t *config)
+{
+    SysTick->LOAD = config->load & 0x00FFFFFFu;   /* 24-bit only */
+    SysTick->VAL  = config->val & 0x00FFFFFFu;    /* 24-bit only */
+    SysTick->CTRL = config->ctrl & 0x07u;         /* Only bits 0,1,2 used */
+}
+
+void BSP_Delay(uint32_t ms)
+{
+    uint32_t start = l_tickCtr;
+    while ((l_tickCtr - start) < ms)
+    {
+        __NOP();
+    }
+}
+
+
+uint32_t BSP_GetTick(void)
+{
+    return l_tickCtr;
+}
+
+uint8_t BSP_TimerExpired(uint32_t target_tick)
+{
+    return (l_tickCtr >= target_tick) ? 1 : 0;
+}
+
 uint32_t BSP_GetVersion(void)
 {
   return __STM32F4xx_NUCLEO_BSP_VERSION;

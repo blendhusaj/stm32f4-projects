@@ -5,6 +5,7 @@
 UART_HandleTypeDef huart2;
 
 extern uint32_t SystemCoreClock;
+
 static User_Button_config_t btn;
 
 void SystemClock_Config(void);
