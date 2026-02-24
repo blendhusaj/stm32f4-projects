@@ -167,4 +167,4 @@ For a solid foundation in embedded, it helps to **avoid relying on AI or code ge
 | **Delays** | SysTick drives a tick counter; we have blocking delay and non-blocking “timer expired” helpers. |
 | **Button → LED** | Edge detection (released → pressed) so one press toggles the LED once (latch behaviour). |
 
-If you are new to embedded or BSPs, start with this README, then open **BSP_code_documentation.md** or **BSP_plan_with_graphs.html** for the full picture.
+
