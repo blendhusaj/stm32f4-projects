@@ -34,7 +34,7 @@ A small embedded project for **STM32F4 Nucleo**: pressing the user button toggle
 ### 4. SysTick and delays
 
 - **SysTick** is a 24‑bit timer that counts down and can generate an interrupt every 1 ms (when configured that way).
-- In the interrupt we increment a counter `l_tickCtr`. From that we get:
+- In our **`bsp_config.c`** layer, the SysTick handler increments a counter `l_tickCtr`. From that we get:
   - **Blocking delay:** `BSP_Delay(ms)` – waits exactly `ms` milliseconds.
   - **Non-blocking delay:** `BSP_GetTick()` and `BSP_TimerExpired(target)` – main loop can do other work and only act when the timer has expired.
 
@@ -67,7 +67,7 @@ The Nucleo BSP used in this project comes from **ST’s official package**:
   **Project** → **Properties** → **C/C++ General** → **Paths and Symbols** → **Source Location** → add the **BSP** folder (or add `stm32f4xx_nucleo.c` to the build).  
   Alternatively, right‑click the project → **Add existing source** and add the `.c` file from the BSP folder.
 
-**Note:** The default BSP from ST does **not** implement all the functions used in this project. You can download the original files from ST and compare them with the ones in this repo to see what was added or changed (e.g. custom button/SysTick helpers and wiring to the application).
+**Note:** The default BSP from ST does **not** implement all the functions used in this project. In this repo, the BSP is **modularized**: ST’s Nucleo files provide the board-level drivers (LED, PB, shields); our **`bsp_config`** layer (see below) provides the button/SysTick config structs and timing helpers used by the application.
 
 ---
 
@@ -81,9 +81,9 @@ From the project documentation (exported from the BSP plan):
 
 **Code structures** – how the modules connect:
 
-![Code structures](docs/code_structure.png)
+![Code structures](docs/code_structures.png)
 
-
+*(If your images use `.jpg`, rename the paths above or save the figures as `architecture_overview.png` and `code_structures.png` in the `docs` folder.)*
 
 ---
 
@@ -92,10 +92,12 @@ From the project documentation (exported from the BSP plan):
 ```
 ├── README.md                    ← You are here
 ├── BSP/
-│   ├── stm32f4xx_nucleo.h      ← BSP: declarations (structs, prototypes)
-│   ├── stm32f4xx_nucleo.c      ← BSP: implementation (GPIO, SysTick, delays)
-│  
-│   
+│   ├── stm32f4xx_nucleo.h      ← ST Nucleo BSP: board drivers (LED, PB, shields)
+│   ├── stm32f4xx_nucleo.c      ← ST Nucleo BSP: implementation
+│   ├── bsp_config.h            ← Our BSP API: config structs, button, SysTick, delays
+│   ├── bsp_config.c            ← Our BSP API: tick counter, BSP_Button_Init, BSP_SysTick_ApplyConfig, etc.
+│   ├── BSP_code_documentation.md
+│   └── BSP_plan_with_graphs.html
 ├── docs/
 │   ├── architecture_overview.png   ← Architecture diagram (from BSP doc)
 │   ├── code_structures.png         ← Code structure diagram
@@ -109,9 +111,12 @@ From the project documentation (exported from the BSP plan):
 └── ...
 ```
 
-This project uses the **standard ST naming** only: **`stm32f4xx_nucleo.h`** and **`stm32f4xx_nucleo.c`** (no separate `bsp.h` / `bsp.c`). Those two files contain the full BSP; they are the ST Nucleo BSP from STM32CubeF4, extended in this repo with the button/SysTick logic described above.
+The BSP is **modularized** into two parts:
 
-- **`main.c`** – Application: init, then `while(1)` with button read and LED toggle on edge.
+- **`stm32f4xx_nucleo.c` / `.h`** – ST’s Nucleo BSP from STM32CubeF4 (board-specific drivers). Optionally extended with ST’s LED/PB helpers; custom button/SysTick logic lives in `bsp_config` to avoid duplication.
+- **`bsp_config.c` / `bsp_config.h`** – Our BSP API: `User_Button_config_t`, `SysTick_Config_t`, `BSP_Button_Init`, `BSP_Button_GetState`, `BSP_SysTick_ApplyConfig`, `BSP_Delay`, `BSP_GetTick`, `BSP_TimerExpired`, and the SysTick handler with tick counter. Main and init code use this layer.
+
+- **`main.c`** – Application: **`BSP_Init()`** (one call that runs HAL, clock, GPIO, UART, configGpio, App_SysTick_Init, buttonConfig_Init, `__enable_irq`), then **`while(1)`** with button read and LED toggle on edge (super loop).
 
 ---
 
@@ -128,14 +133,20 @@ This project uses the **standard ST naming** only: **`stm32f4xx_nucleo.h`** and 
 
 ## How it works (flow in simple words)
 
-1. **Startup:** HAL init, clock config, GPIO and UART init, then our code: configure the button (port, pin, mode, pull) and call `BSP_Button_Init`; configure SysTick (e.g. 1 ms tick) and call `BSP_SysTick_ApplyConfig`; enable interrupts.
-2. **Every 1 ms:** SysTick interrupt runs, increments `l_tickCtr` (and `HAL_IncTick` for HAL_Delay).
-3. **Main loop:** Read button with `BSP_Button_GetState`. If we see “was released, now pressed”, toggle the LED (e.g. `GPIOA->ODR` for PA5). Store current button state for next iteration (for edge detection).
+1. **Startup:** `main()` calls **`BSP_Init()`** once. That runs: HAL init, clock config, GPIO and UART init, `configGpio`, then our code (configure the button and call `BSP_Button_Init`; configure SysTick and call `BSP_SysTick_ApplyConfig` via `App_SysTick_Init`), then `__enable_irq`. So one function does all board and BSP setup.
+2. **Every 1 ms:** SysTick interrupt runs (in `bsp_config.c`), increments `l_tickCtr` (and `HAL_IncTick` for HAL_Delay).
+3. **Main loop (super loop):** Read button with `BSP_Button_GetState`. If we see “was released, now pressed”, toggle the LED (e.g. `GPIOA->ODR` for PA5). Store current button state for next iteration (for edge detection).
 
-So: BSP handles *how* the button and timer work; main only decides *when* to toggle the LED.
+So: the BSP is split into ST’s Nucleo layer and our `bsp_config` layer; main only calls `BSP_Init()` then the super loop, and the BSP handles *how* the button and timer work.
 
 ---
 
+## Learn more (detailed docs)
+
+- **[BSP_code_documentation.md](BSP/BSP_code_documentation.md)** – Full explanation of `main.c` and `stm32f4xx_nucleo.h` / `stm32f4xx_nucleo.c`, with tables and design notes.
+- **[BSP_plan_with_graphs.html](BSP/BSP_plan_with_graphs.html)** – Same content with **architecture and data-flow diagrams**; open in a browser (internet needed once to load the diagram library).
+
+Both are written so that a beginner can follow what each file does and how they connect.
 
 ### Docs folder (reference material)
 
@@ -161,10 +172,11 @@ For a solid foundation in embedded, it helps to **avoid relying on AI or code ge
 
 | Topic | What we did |
 |-------|-------------|
-| **BSP** | All hardware access (GPIO MODER/PUPDR/IDR, SysTick) lives in `stm32f4xx_nucleo.c`; main only calls BSP functions. |
-| **Config** | Button and SysTick are configured via structs; BSP uses them to set registers (no hard-coded pins in BSP). |
+| **BSP (modularized)** | **Two parts:** (1) ST’s `stm32f4xx_nucleo.c/.h` for board drivers; (2) our `bsp_config.c/.h` for button/SysTick config structs, tick counter, delays. Main only calls BSP functions. |
+| **Init** | One entry point: **`BSP_Init()`** in `main.c` runs HAL, clock, GPIO, UART, configGpio, App_SysTick_Init, buttonConfig_Init, `__enable_irq`. Then `main()` is just `BSP_Init()` + super loop. |
+| **Config** | Button and SysTick are configured via structs (`User_Button_config_t`, `SysTick_Config_t`); BSP uses them to set registers (no hard-coded pins in BSP). |
 | **GPIO struct** | First field = `GPIO_TypeDef *port`; then pin and options; BSP uses `port` for every register. |
-| **Delays** | SysTick drives a tick counter; we have blocking delay and non-blocking “timer expired” helpers. |
+| **Delays** | SysTick (in `bsp_config.c`) drives a tick counter; we have blocking delay and non-blocking “timer expired” helpers. |
 | **Button → LED** | Edge detection (released → pressed) so one press toggles the LED once (latch behaviour). |
 
-
+If you are new to embedded or BSPs, start with this README, then open **BSP_code_documentation.md** or **BSP_plan_with_graphs.html** for the full picture.
