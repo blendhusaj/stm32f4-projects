@@ -96,8 +96,8 @@ From the project documentation (exported from the BSP plan):
 │   ├── stm32f4xx_nucleo.c      ← ST Nucleo BSP: implementation
 │   ├── bsp_config.h            ← Our BSP API: config structs, button, SysTick, delays
 │   ├── bsp_config.c            ← Our BSP API: tick counter, BSP_Button_Init, BSP_SysTick_ApplyConfig, etc.
-│   ├── BSP_code_documentation.md
-│   └── BSP_plan_with_graphs.html
+│   
+│   
 ├── docs/
 │   ├── architecture_overview.png   ← Architecture diagram (from BSP doc)
 │   ├── code_structures.png         ← Code structure diagram
