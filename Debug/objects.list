@@ -1,5 +1,5 @@
+"./BSP/Configs/bsp_config.o"
 "./BSP/stm32f4xx_nucleo.o"
-"./Core/Src/delay.o"
 "./Core/Src/main.o"
 "./Core/Src/stm32f4xx_hal_msp.o"
 "./Core/Src/stm32f4xx_it.o"

@@ -37,12 +37,6 @@
 /* https://www.adafruit.com/products/802 */
 #define ADAFRUIT_TFT_JOY_SD_ID802
 
-#define SYSTICK_CTRL_ENABLE (1u << 0)
-#define SYSTICK_CTRL_TICKINIT (1u << 1)
-#define SYSTICK_CTRL_CLKSOURCE (1u << 2)
-#define BSP_DELAY_START(ms)  (BSP_GetTick() + (ms))
-#define UserButton_GPIO GPIOA
-
 typedef enum 
 {
   LED2 = 0
@@ -220,61 +214,8 @@ typedef enum
 #define NUCLEO_ADCx_GPIO_CLK_DISABLE()            __HAL_RCC_GPIOB_CLK_DISABLE()
 #endif /* HAL_ADC_MODULE_ENABLED */
 
-typedef struct{
-	GPIO_TypeDef *port;
-	uint32_t pin;
-	uint32_t mode;
-	uint32_t pull;
-}User_Button_config_t;
 
-void BSP_Button_Init (const User_Button_config_t *button);
-/**
- * @brief  Read button state (0 = released, 1 = pressed for active-low with pull-up)
- */
-//uint8_t BSP_Button_GetState(const User_Button_Config_t *button);
-
-// Systick config struct
-typedef struct{
-	 uint32_t load; // Reload value
-	 uint32_t val; // Current value, usually 0 to clear
-	 uint32_t ctrl; // CTRL bits: enable, tickinit, clksource
-}SysTick_Config_t;
-
-/**
- * @brief  Apply SysTick config from your struct (call from main after filling the struct)
- * @param  config  Pointer to your SysTick_Config_t
- */
-void BSP_SysTick_ApplyConfig(const SysTick_Config_t *config);
-
-/* Helper: start a non-blocking delay of ms, use with BSP_TimerExpired() */
-
-
-/**
-  * @brief configure sysTick for 1ms tick (call once at startup)
-  */
-void BSP_SysTick_Config(void);
-
-/**
-  * @brief blocking delay in miliseconds
-  * @param ms Delay duration in miliseconds
-  */
-void BSP_Delay(uint32_t ms);
-/**
- * @brief Get current tick time count(for non-blocking timing)
- * @return Tick count since startup
- */
-uint32_t BSP_GetTick(void);
-/**
- * @brief Check if a target tick has been reached (non-blocking delay)
- * @param target_tick Target tick form BSP_GetTick() + ms
- * @return 1 if expired, 0 if not
- */
-uint8_t BSP_TimerExpired(uint32_t target_tick);
-/** @defgroup STM32F4XX_NUCLEO_LOW_LEVEL_Exported_Macros STM32F4XX NUCLEO LOW LEVEL Exported Macros
-  * @{
-  */  
-/**
-  * @}
+  /* @}
   */ 
 
 /** @defgroup STM32F4XX_NUCLEO_LOW_LEVEL_Exported_Functions STM32F4XX NUCLEO LOW LEVEL Exported Functions

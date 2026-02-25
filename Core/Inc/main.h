@@ -29,7 +29,6 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f446xx.h"
 #include "stm32f4xx_hal.h"
-#include "stm32f4xx_nucleo.h"
 #include "stm32f4xx_hal_gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
