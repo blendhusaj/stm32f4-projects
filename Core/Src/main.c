@@ -1,4 +1,5 @@
 #include "main.h"
+#include "stm32f4xx_nucleo.h"
 #include "bsp_config.h"
 #include <stdio.h>
 #include <string.h>
@@ -27,6 +28,7 @@ static void BSP_Init(void)
     SystemClock_Config();
     MX_GPIO_Init();
     MX_USART2_UART_Init();
+    BSP_LED_Init(LED2);
     configGpio();
     App_SysTick_Init();
     buttonConfig_Init();
@@ -45,7 +47,7 @@ int main(void)
 
         if (curr_btn == 1 && prev_btn == 0)
         {
-            GPIOA->ODR ^= (1u << 5);
+            BSP_LED_Toggle(LED2);
         }
         prev_btn = curr_btn;
     }

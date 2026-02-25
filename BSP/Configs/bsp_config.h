@@ -10,6 +10,7 @@
 #define SYSTICK_CTRL_CLKSOURCE (1u << 2)
 #define BSP_DELAY_START(ms)   (BSP_GetTick() + (ms))
 
+
 /* --- Types (defined before use in declarations) --- */
 typedef struct {
     GPIO_TypeDef *port;
