@@ -1,7 +1,7 @@
 ../BSP/Configs/bsp_config.c:8:6:SysTick_Handler	1
 ../BSP/Configs/bsp_config.c:14:6:BSP_Button_Init	4
-../BSP/Configs/bsp_config.c:29:9:BSP_Button_GetState	1
-../BSP/Configs/bsp_config.c:34:6:BSP_SysTick_ApplyConfig	1
-../BSP/Configs/bsp_config.c:41:6:BSP_Delay	2
-../BSP/Configs/bsp_config.c:49:10:BSP_GetTick	1
-../BSP/Configs/bsp_config.c:54:9:BSP_TimerExpired	2
+../BSP/Configs/bsp_config.c:30:9:BSP_Button_GetState	1
+../BSP/Configs/bsp_config.c:35:6:BSP_SysTick_ApplyConfig	1
+../BSP/Configs/bsp_config.c:42:6:BSP_Delay	2
+../BSP/Configs/bsp_config.c:50:10:BSP_GetTick	1
+../BSP/Configs/bsp_config.c:55:9:BSP_TimerExpired	2

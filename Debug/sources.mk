@@ -26,5 +26,6 @@ BSP/Configs \
 BSP \
 Core/Src \
 Core/Startup \
+Drivers/CAN \
 Drivers/STM32F4xx_HAL_Driver/Src \
 

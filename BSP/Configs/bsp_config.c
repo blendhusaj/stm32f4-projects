@@ -26,6 +26,7 @@ void BSP_Button_Init(const User_Button_config_t *button)
     button->port->PUPDR &= ~(3u << shift);
     button->port->PUPDR |= (button->pull << shift);
 }
+
 uint8_t BSP_Button_GetState(const User_Button_config_t *button)
 {
     return (button->port->IDR & button->pin) ? 0u : 1u;

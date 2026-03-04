@@ -3,12 +3,27 @@
 
 #include <stdint.h>
 #include "stm32f4xx_hal.h"
+#include "stm32f4xx_nucleo.h"
+#include "main.h"
+#include <stdint.h>
 
 /* --- Macros --- */
 #define SYSTICK_CTRL_ENABLE    (1u << 0)
 #define SYSTICK_CTRL_TICKINIT  (1u << 1)
 #define SYSTICK_CTRL_CLKSOURCE (1u << 2)
 #define BSP_DELAY_START(ms)   (BSP_GetTick() + (ms))
+
+
+// User_Button_config_t btn;
+// SysTick_Config_t syscfg;
+//
+//void SystemClock_Config(void);
+// void MX_GPIO_Init(void);
+// void MX_USART2_UART_Init(void);
+// void configGpio(void);
+// void App_SysTick_Init(void);
+// void buttonConfig_Init(void);
+
 
 
 /* --- Types (defined before use in declarations) --- */
